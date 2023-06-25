@@ -1,0 +1,31 @@
+###
+//Аутентификация с получением токена: пользваталеь и пароль корректны
+POST http://localhost:8070/login
+Content-Type: application/json
+
+{
+  "login": "ivanov@mail.ru",
+  "password": "111111"
+}
+
+###
+//Аутентификация с получением токена: пользватель корректен, пароль некорректный
+POST http://localhost:8070/login
+Content-Type: application/json
+
+{
+"login": "ivanov@mail.ru",
+"password": "2"
+}
+
+
+###
+//Аутентификация с получением токена: пользватель некорректный, пароль некорректный
+POST http://localhost:8070/login
+Content-Type: application/json
+
+{
+  "login": "kukin@mail.ru",
+  "password": "2"
+}
+

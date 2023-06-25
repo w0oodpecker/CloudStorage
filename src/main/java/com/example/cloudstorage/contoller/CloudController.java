@@ -1,16 +1,33 @@
 package com.example.cloudstorage.contoller;
 
-import com.example.cloudstorage.model.JWTRequest;
+import com.example.cloudstorage.model.Error;
+import com.example.cloudstorage.model.JwtRequest;
+import com.example.cloudstorage.model.JwtResponse;
+import com.example.cloudstorage.service.AuthService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.security.auth.message.AuthException;
+
 @RestController
+@RequiredArgsConstructor
 public class CloudController {
 
+    private final AuthService authService;
 
     @PostMapping("/login") //Authorization method
-    public String loginCall(@RequestBody JWTRequest userCredentials) {
-        return null;
+    public ResponseEntity<?> loginCall(@RequestBody JwtRequest authRequest) {
+        final JwtResponse token;
+        try {
+            token = authService.login(authRequest);
+        } catch (AuthException exc) {
+            Error error = new Error(exc.getMessage());
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(token, HttpStatus.OK);
     }
 
     @PostMapping("/logout") //Logout method
