@@ -1,4 +1,4 @@
-package com.example.cloudstorage.repository;
+package com.example.cloudstorage.model;
 
 import lombok.Getter;
 import lombok.Setter;

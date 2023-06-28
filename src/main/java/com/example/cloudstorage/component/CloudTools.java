@@ -6,15 +6,15 @@ import org.springframework.stereotype.Component;
 import java.util.Random;
 
 @Component
-public class Tools {
+public class CloudTools {
 
     private static int leftLimit;
     private static int rightLimit;
     private static int lenght;
 
-    public Tools(@Value("${error.id.leftlimit}") int leftLimit,
-                 @Value("${error.id.rightlimit}") int rightLimit,
-                 @Value("${error.id.lenght}") int lenght){
+    public CloudTools(@Value("${error.id.leftlimit}") int leftLimit,
+                      @Value("${error.id.rightlimit}") int rightLimit,
+                      @Value("${error.id.lenght}") int lenght){
         this.leftLimit = leftLimit;
         this.rightLimit = rightLimit;
         this.lenght = lenght;

@@ -1,5 +1,6 @@
 package com.example.cloudstorage.repository;
 
+import com.example.cloudstorage.model.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

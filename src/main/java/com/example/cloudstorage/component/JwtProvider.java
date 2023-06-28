@@ -1,11 +1,8 @@
 package com.example.cloudstorage.component;
 
-import com.example.cloudstorage.repository.User;
+import com.example.cloudstorage.model.User;
 
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
@@ -27,14 +24,16 @@ import java.util.Date;
 public class JwtProvider {
 
     private final SecretKey jwtAccessSecret;
+    private final int tokenExpiration;
 
-    JwtProvider(@Value("${jwt.secret.access}") String jwtAccessSecret) {
+    JwtProvider(@Value("${jwt.secret.access}") String jwtAccessSecret, @Value("${token.expiration}") int tokenExpiration) {
         this.jwtAccessSecret = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtAccessSecret));
+        this.tokenExpiration = tokenExpiration;
     }
 
     public String generateAccessToken(@NonNull User user) {
         final LocalDateTime now = LocalDateTime.now();
-        final Instant accessExpirationInstant = now.plusMinutes(5).atZone(ZoneId.systemDefault()).toInstant();
+        final Instant accessExpirationInstant = now.plusMinutes(tokenExpiration).atZone(ZoneId.systemDefault()).toInstant();
         final Date accessExpiration = Date.from(accessExpirationInstant);
         return Jwts.builder()
                 .setSubject(user.getLogin())
@@ -66,5 +65,17 @@ public class JwtProvider {
             log.error("invalid token", e);
         }
         return false;
+    }
+
+    public Claims getAccessClaims(@NonNull String token) {
+        return getClaims(token, jwtAccessSecret);
+    }
+
+    private Claims getClaims(@NonNull String token, @NonNull Key secret) {
+        return Jwts.parserBuilder()
+                .setSigningKey(secret)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 }
