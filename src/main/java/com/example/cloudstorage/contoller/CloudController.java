@@ -1,5 +1,6 @@
 package com.example.cloudstorage.contoller;
 
+import com.example.cloudstorage.exeptions.DeleteFileException;
 import com.example.cloudstorage.exeptions.GettingFileListException;
 import com.example.cloudstorage.exeptions.InputDataException;
 import com.example.cloudstorage.exeptions.UnauthorizedException;
@@ -24,7 +25,7 @@ public class CloudController {
     private final CloudAuthService authService;
     private final CloudFileService fileService;
 
-    @PostMapping("/login") //Authorization method
+    @PostMapping(value = "/login") //Authorization method
     public ResponseEntity<?> loginCall(@RequestBody JwtRequest authRequest) {
         // TODO: 6/27/2023 Уточнить формат ответа при ошибке аутентификации, сейчас отправляется объект ошибки, но фронт не ловит
         final JwtResponse token;
@@ -50,50 +51,42 @@ public class CloudController {
     public ResponseEntity<?> fileUploadCall(@RequestHeader("auth-token") String userAuthToken,
                                             @RequestParam("filename") String fileName,
                                             @RequestParam("file") MultipartFile file) {
-
-        // TODO: 6/27/2023 проверить вызовы исключений
         try {
             fileService.uploadFile(fileName, file);
         } catch (InputDataException exc) {
             CloudError error = new CloudError(exc.getMessage());
-            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST); //400
         } catch (UnauthorizedException exc) {
             CloudError error = new CloudError(exc.getMessage());
-            return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
-        } catch (GettingFileListException exc) {
-            CloudError error = new CloudError(exc.getMessage());
-            return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED); //401
         }
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK); //200
     }
 
     @DeleteMapping("/file") //Delete file
     public ResponseEntity<?> deleteFileCall(@RequestHeader("auth-token") String userAuthToken,
                                             @RequestParam("filename") String fileName) {
-        // TODO: 6/27/2023 Проверить вызовы исключений
         try {
             fileService.deleteFile(fileName);
         } catch (InputDataException exc) {
             CloudError error = new CloudError(exc.getMessage());
-            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST); //400
         } catch (UnauthorizedException exc) {
             CloudError error = new CloudError(exc.getMessage());
-            return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
-        } catch (GettingFileListException exc) {
+            return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED); //401
+        } catch (DeleteFileException exc) {
             CloudError error = new CloudError(exc.getMessage());
-            return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR); //500
         }
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK); //200
     }
 
 
     @GetMapping("/file") //Download file from cloud
     public ResponseEntity<?> downloadFileCall(@RequestHeader("auth-token") String userAuthToken,
                                               @RequestParam("filename") String fileName) {
-
         FileSystemResource resource;
         HttpHeaders headers;
-
         try {
             resource = fileService.downloadFile(fileName);
             MediaType mediaType = MediaType.MULTIPART_FORM_DATA;
@@ -103,15 +96,13 @@ public class CloudController {
             headers.setContentDisposition(disposition);
         } catch (InputDataException exc) {
             CloudError error = new CloudError(exc.getMessage());
-            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST); //400
         } catch (UnauthorizedException exc) {
             CloudError error = new CloudError(exc.getMessage());
-            return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
-        } catch (GettingFileListException exc) {
-            CloudError error = new CloudError(exc.getMessage());
-            return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED); //401
         }
-        return new ResponseEntity<>(resource, headers, HttpStatus.OK);
+            // TODO: 6/28/2023 Реализовать ошибку 500
+        return new ResponseEntity<>(resource, headers, HttpStatus.OK); //200
     }
 
     /*@PutMapping("/file") //Edit file name
@@ -121,25 +112,25 @@ public class CloudController {
         return null;
     }*/
 
+
     @GetMapping("/list") //Get all files
     public ResponseEntity<?> listFilesCall(@RequestHeader("auth-token") String userAuthToken,
                                            @RequestParam("limit") int limit) {
         ArrayList<?> fileList;
-
-        // TODO: 6/27/2023 Проверить вызовы исключений
         // TODO: 6/27/2023 Что такое limit=3 
         try {
             fileList = fileService.getFileList();
         } catch (InputDataException exc) {
             CloudError error = new CloudError(exc.getMessage());
-            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST); //400
         } catch (UnauthorizedException exc) {
             CloudError error = new CloudError(exc.getMessage());
-            return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED); //401
         } catch (GettingFileListException exc) {
             CloudError error = new CloudError(exc.getMessage());
-            return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR); //500
         }
-        return new ResponseEntity<>(fileList, HttpStatus.OK);
+        return new ResponseEntity<>(fileList, HttpStatus.OK); //200
     }
+
 }

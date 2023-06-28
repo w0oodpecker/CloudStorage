@@ -1,6 +1,9 @@
 package com.example.cloudstorage.service;
 
+import com.example.cloudstorage.exeptions.DeleteFileException;
+import com.example.cloudstorage.exeptions.GettingFileListException;
 import com.example.cloudstorage.exeptions.InputDataException;
+import com.example.cloudstorage.exeptions.UnauthorizedException;
 import com.example.cloudstorage.model.CloudFile;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
@@ -14,36 +17,44 @@ import java.util.List;
 @Service
 public class CloudFileService {
 
-    private String filesPath;
+    private final String filesPath;
 
     CloudFileService(@Value("${files.path}") String filesPath) {
         this.filesPath = filesPath;
     }
 
 
-    public ArrayList<?> getFileList() { //Получение списка файлов репозитория
+    public ArrayList<?> getFileList() throws InputDataException, GettingFileListException, UnauthorizedException { //Получение списка файлов репозитория
         File dir = new File(filesPath);
-
         if(!dir.exists()) throw new InputDataException("Каталог не существует");
-
         List<CloudFile> lst = new ArrayList<>();
-        for (File file : dir.listFiles()) {
-            if (file.isFile())
-                lst.add(new CloudFile(file.getName(), file.length()));
+        try {
+            for (File file : dir.listFiles()) {
+                if (file.isFile())
+                    lst.add(new CloudFile(file.getName(), file.length()));
+            }
+        }
+        catch (NullPointerException exc){
+            throw new GettingFileListException("Ошибка репозитория");
         }
         return (ArrayList<CloudFile>) lst;
+        // TODO: 6/28/2023 Добавить проверку валидности акаунта
     }
 
 
-    public void deleteFile(String fileName) { //Удаление файла
+    public void deleteFile(String fileName) throws InputDataException, UnauthorizedException, DeleteFileException { //Удаление файла
         File file = new File(filesPath + "/" + fileName);
+        if (!file.exists() || !file.isFile())
+            throw new InputDataException("Файл не существует");
         if (!file.delete()) {
-            throw new InputDataException("Ошибка удаления файла");
+            throw new DeleteFileException("Ошибка удаления файла");
         }
+        // TODO: 6/28/2023 Добавить проверку валидности акаунта
+
     }
 
 
-    public void uploadFile(String fileName, MultipartFile file) { //Загрузка файла
+    public void uploadFile(String fileName, MultipartFile file) throws InputDataException, UnauthorizedException { //Загрузка файла
         try {
             byte[] bytes = file.getBytes();
             BufferedOutputStream stream =
@@ -53,11 +64,16 @@ public class CloudFileService {
         } catch (IOException exc) {
             throw new InputDataException("Ошибка создания или загрузки файла");
         }
+        // TODO: 6/28/2023 Добавить проверку валидности аккаунта
     }
 
-    public FileSystemResource downloadFile(String fileName) { //Запрос файла
+    public FileSystemResource downloadFile(String fileName) throws InputDataException, UnauthorizedException { //Запрос файла
         FileSystemResource resource;
         resource = new FileSystemResource(filesPath +"/" + fileName);
+        if(!resource.exists() | !resource.isFile() | !resource.isReadable()){
+            throw new InputDataException("Файл не существуе или не может быть прочитан");
+        }
         return resource;
+        // TODO: 6/28/2023 Добавить проверку валидности акаунта 
     }
 }

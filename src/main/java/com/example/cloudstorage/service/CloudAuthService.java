@@ -20,8 +20,6 @@ public class CloudAuthService {
     private final JwtProvider jwtProvider;
 
     public JwtResponse login(@NonNull JwtRequest authRequest) throws AuthException {
-
-
             final User user = cloudUsers.findUserByLogin(authRequest.getLogin())
                     .orElseThrow(() -> new AuthException("Пользователь не найден"));
             if (user.getPassword().equals(authRequest.getPassword())) {
@@ -30,9 +28,6 @@ public class CloudAuthService {
             } else {
                 throw new AuthException("Неправильный пароль");
             }
-
-
     }
-
 
 }

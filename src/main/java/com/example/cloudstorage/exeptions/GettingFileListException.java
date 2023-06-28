@@ -1,6 +1,6 @@
 package com.example.cloudstorage.exeptions;
 
-public class GettingFileListException extends RuntimeException {
+public class GettingFileListException extends Exception {
     public GettingFileListException(String msg) {
         super(msg);
     }

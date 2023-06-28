@@ -7,9 +7,10 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class JwtResponse {
-    private String accessToken;
 
     @JsonProperty("auth-token")
+    private String accessToken;
+
     public String getAccessToken() {
         return accessToken;
     }
