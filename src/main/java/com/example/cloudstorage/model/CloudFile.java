@@ -8,10 +8,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class CloudFile {
-
     private String filename;
     private long size;
-
 }
 
 

@@ -1,10 +1,8 @@
 package com.example.cloudstorage.contoller;
 
-import com.example.cloudstorage.exeptions.DeleteFileException;
-import com.example.cloudstorage.exeptions.GettingFileListException;
-import com.example.cloudstorage.exeptions.InputDataException;
-import com.example.cloudstorage.exeptions.UnauthorizedException;
+import com.example.cloudstorage.exeptions.*;
 import com.example.cloudstorage.model.CloudError;
+import com.example.cloudstorage.model.CloudFile;
 import com.example.cloudstorage.model.JwtRequest;
 import com.example.cloudstorage.model.JwtResponse;
 import com.example.cloudstorage.service.CloudAuthService;
@@ -100,24 +98,37 @@ public class CloudController {
         } catch (UnauthorizedException exc) {
             CloudError error = new CloudError(exc.getMessage());
             return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED); //401
+        } catch (RuntimeException exc) {
+            CloudError error = new CloudError(exc.getMessage());
+            return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR); //500
         }
-            // TODO: 6/28/2023 Реализовать ошибку 500
         return new ResponseEntity<>(resource, headers, HttpStatus.OK); //200
     }
 
-    /*@PutMapping("/file") //Edit file name
+    @PutMapping("/file") //Edit file name
     public ResponseEntity<?> editFileNameCall(@RequestHeader("auth-token") String userAuthToken,
                                               @RequestParam("filename") String fileName,
-                                              @RequestBody String name) {
-        return null;
-    }*/
+                                              @RequestBody CloudFile newFile) {
+        try {
+            fileService.renameFile(fileName, newFile);
+        } catch (InputDataException exc) {
+            CloudError error = new CloudError(exc.getMessage());
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST); //400
+        } catch (UnauthorizedException exc) {
+            CloudError error = new CloudError(exc.getMessage());
+            return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED); //401
+        } catch (RenameFileException exc) {
+            CloudError error = new CloudError(exc.getMessage());
+            return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR); //500
+        }
+        return new ResponseEntity<>(HttpStatus.OK); //200
+    }
 
 
     @GetMapping("/list") //Get all files
     public ResponseEntity<?> listFilesCall(@RequestHeader("auth-token") String userAuthToken,
                                            @RequestParam("limit") int limit) {
         ArrayList<?> fileList;
-        // TODO: 6/27/2023 Что такое limit=3 
         try {
             fileList = fileService.getFileList();
         } catch (InputDataException exc) {

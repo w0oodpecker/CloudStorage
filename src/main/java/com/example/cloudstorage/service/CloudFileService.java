@@ -1,9 +1,6 @@
 package com.example.cloudstorage.service;
 
-import com.example.cloudstorage.exeptions.DeleteFileException;
-import com.example.cloudstorage.exeptions.GettingFileListException;
-import com.example.cloudstorage.exeptions.InputDataException;
-import com.example.cloudstorage.exeptions.UnauthorizedException;
+import com.example.cloudstorage.exeptions.*;
 import com.example.cloudstorage.model.CloudFile;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
@@ -76,4 +73,16 @@ public class CloudFileService {
         return resource;
         // TODO: 6/28/2023 Добавить проверку валидности акаунта 
     }
+
+    public void renameFile(String fileName, CloudFile newFile) throws InputDataException, UnauthorizedException, RenameFileException {
+            File sourcFile = new File(filesPath + "/" + fileName);
+            if(!sourcFile.exists() | sourcFile.isDirectory()){
+                throw new InputDataException("Файл не существует");
+            }
+            if(!sourcFile.renameTo(new File(filesPath + "/" + newFile.getFilename()))){
+               throw new RenameFileException("Не удалось выполнить переименование файла");
+            }
+        // TODO: 6/29/2023 Добавить проверку валидности акаунта
+    }
+
 }
