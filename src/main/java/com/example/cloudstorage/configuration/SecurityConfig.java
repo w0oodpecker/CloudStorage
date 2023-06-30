@@ -1,11 +1,10 @@
 package com.example.cloudstorage.configuration;
 
-
-import com.example.cloudstorage.component.JwtFilter;
 import lombok.RequiredArgsConstructor;
+import org.apache.nifi.web.security.jwt.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -15,26 +14,28 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
-    private final JwtFilter jwtFilter;
+    private final JwtAuthenticationFilter jwtAuthFilter;
+    private final AuthenticationProvider authenticationProvider;
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http
-                .httpBasic().disable()
+        http
                 .csrf().disable()
-                .cors().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .authorizeHttpRequests()
+                .regexMatchers("")
+                .permitAll()
+                .anyRequest()
+                .authenticated()
                 .and()
-                .authorizeHttpRequests(
-                        authz -> authz
-                                .antMatchers("/login").permitAll()
-                                .anyRequest().authenticated()
-                                .and()
-                                .addFilterAfter(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-                ).build();
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+        return http.build();
     }
 
 }
