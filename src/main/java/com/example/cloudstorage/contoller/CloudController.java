@@ -1,11 +1,9 @@
 package com.example.cloudstorage.contoller;
 
-import com.example.cloudstorage.exeptions.*;
+import com.example.cloudstorage.exceptions.*;
 import com.example.cloudstorage.model.CloudError;
 import com.example.cloudstorage.model.CloudFile;
-import com.example.cloudstorage.model.JwtRequest;
-import com.example.cloudstorage.model.JwtResponse;
-import com.example.cloudstorage.service.CloudAuthService;
+import com.example.cloudstorage.service.AuthenticationService;
 import com.example.cloudstorage.service.CloudFileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.FileSystemResource;
@@ -13,17 +11,16 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.security.auth.message.AuthException;
 import java.util.ArrayList;
 
 @RestController
 @RequiredArgsConstructor
 public class CloudController {
 
-    private final CloudAuthService authService;
+    private final AuthenticationService authService;
     private final CloudFileService fileService;
 
-    @PostMapping(value = "/login") //Authorization method
+    /*@PostMapping(value = "/login") //Authorization method
     public ResponseEntity<?> loginCall(@RequestBody JwtRequest authRequest) {
         // TODO: 6/27/2023 Уточнить формат ответа при ошибке аутентификации, сейчас отправляется объект ошибки, но фронт не ловит
         final JwtResponse token;
@@ -43,7 +40,7 @@ public class CloudController {
         return null;
     }
 
-
+*/
     @PostMapping(value = "/file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     //Upload file to server
     public ResponseEntity<?> fileUploadCall(@RequestHeader("auth-token") String userAuthToken,

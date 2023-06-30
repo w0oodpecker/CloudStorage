@@ -1,4 +1,4 @@
-package com.example.cloudstorage.exeptions;
+package com.example.cloudstorage.exceptions;
 
 public class GettingFileListException extends Exception {
     public GettingFileListException(String msg) {

@@ -14,7 +14,7 @@ public class CloudTools {
 
     public CloudTools(@Value("${error.id.leftlimit}") int leftLimit,
                       @Value("${error.id.rightlimit}") int rightLimit,
-                      @Value("${error.id.lenght}") int lenght){
+                      @Value("${error.id.lenght}") int lenght) {
         this.leftLimit = leftLimit;
         this.rightLimit = rightLimit;
         this.lenght = lenght;
@@ -23,7 +23,7 @@ public class CloudTools {
     /*Генератор случайной строки*/
     public static String getRandomCode() {
         Random random = new Random();
-        String  string = random.ints(leftLimit, rightLimit + 1)
+        String string = random.ints(leftLimit, rightLimit + 1)
                 .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
                 .limit(lenght)
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)

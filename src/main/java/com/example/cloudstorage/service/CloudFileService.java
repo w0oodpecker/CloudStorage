@@ -1,6 +1,6 @@
 package com.example.cloudstorage.service;
 
-import com.example.cloudstorage.exeptions.*;
+import com.example.cloudstorage.exceptions.*;
 import com.example.cloudstorage.model.CloudFile;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;

@@ -1,4 +1,4 @@
-package com.example.cloudstorage.exeptions;
+package com.example.cloudstorage.exceptions;
 
 public class InputDataException extends Exception {
     public InputDataException(String msg) {
