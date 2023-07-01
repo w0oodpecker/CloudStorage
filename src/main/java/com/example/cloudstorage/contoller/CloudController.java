@@ -20,27 +20,7 @@ public class CloudController {
     private final AuthenticationService authService;
     private final CloudFileService fileService;
 
-    /*@PostMapping(value = "/login") //Authorization method
-    public ResponseEntity<?> loginCall(@RequestBody JwtRequest authRequest) {
-        // TODO: 6/27/2023 Уточнить формат ответа при ошибке аутентификации, сейчас отправляется объект ошибки, но фронт не ловит
-        final JwtResponse token;
-        try {
-            token = authService.login(authRequest);
-        } catch (AuthException exc) {
-            CloudError error = new CloudError(exc.getMessage());
-            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity<>(token, HttpStatus.OK);
-    }
 
-
-    @PostMapping("/logout") //Logout method
-    public ResponseEntity<?> logoutCall(@RequestHeader("auth-token") String userAuthToken) {
-        // TODO: 6/27/2023 Решить вопрос отзыва или блокировки токена
-        return null;
-    }
-
-*/
     @PostMapping(value = "/file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     //Upload file to server
     public ResponseEntity<?> fileUploadCall(@RequestHeader("auth-token") String userAuthToken,

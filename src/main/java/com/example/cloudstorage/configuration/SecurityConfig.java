@@ -26,7 +26,7 @@ public class SecurityConfig {
                 .httpBasic().disable()
                 .csrf().disable()
                 .authorizeHttpRequests()
-                .antMatchers("/**")
+                .antMatchers("/login")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

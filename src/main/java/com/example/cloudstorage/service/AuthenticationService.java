@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-
     private final AuthenticationManager authenticationManager;
     private final UsersRepository repository;
     private final JwtService jwtService;
@@ -27,6 +26,4 @@ public class AuthenticationService {
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder().build();
     }
-
-
 }
