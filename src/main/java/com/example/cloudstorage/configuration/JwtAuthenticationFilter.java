@@ -28,7 +28,7 @@ import java.util.Map;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 
-    private static final String AUTHORIZATION = "Auth-Token";
+    private static final String AUTHORIZATION = "auth-token";
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
 
@@ -51,7 +51,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if(authenticationRequest.getPassword().equals(userDetails.getPassword())){
             String token = jwtService.generateToken(userDetails);
             response.setStatus(HttpServletResponse.SC_OK);
-            response.addHeader(AUTHORIZATION, token);
+            response.addHeader(AUTHORIZATION, "Bearer " + token);
         }
         else {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
