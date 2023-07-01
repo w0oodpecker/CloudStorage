@@ -1,11 +1,12 @@
 package com.example.cloudstorage.configuration;
 
 import com.example.cloudstorage.model.AuthenticationRequest;
+import com.example.cloudstorage.model.AuthenticationResponse;
 import com.example.cloudstorage.service.AuthenticationService;
 import com.example.cloudstorage.service.JwtService;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.h2.util.json.JSONObject;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Map;
 
 
@@ -44,7 +46,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String jwt;
         final String login;
 
-        if (authHeader == null || !authHeader.startsWith("Bearer")) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
 
         AuthenticationRequest authenticationRequest = readRequestBody(request);
         UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getLogin());
@@ -52,6 +54,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String token = jwtService.generateToken(userDetails);
             response.setStatus(HttpServletResponse.SC_OK);
             response.addHeader(AUTHORIZATION, "Bearer " + token);
+
+            AuthenticationResponse authenticationResponse = new AuthenticationResponse(token);
+            ObjectMapper mapper = new ObjectMapper();
+            String body = mapper.writeValueAsString(authenticationResponse);
+
+
+            PrintWriter out = response.getWriter();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            out.print(body);
+            out.flush();
         }
         else {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
