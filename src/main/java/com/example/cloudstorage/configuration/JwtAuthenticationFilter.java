@@ -60,8 +60,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             try {
                 userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getLogin());
             } catch (UsernameNotFoundException exc) {
-                generateBody(response, new CloudError(BADLOGIN));
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                generateBody(response, new CloudError(BADLOGIN));
                 filterChain.doFilter(request, response);
                 return;
             }
@@ -69,11 +69,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             //Если юзер существует в репозитории, то проверяем пароль и возвращаем ок и новый токен
             if (!authenticationRequest.getPassword().equals(userDetails.getPassword())) {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                generateBody(response, new CloudError(BADPASSWORD));
+                String k = String.valueOf(response.getStatus());
+                filterChain.doFilter(request, response);
+                return;
             }
             String token = jwtService.generateToken(userDetails);
             AuthenticationResponse authenticationResponse = new AuthenticationResponse(token);
-            generateBody(response, authenticationResponse);
             response.setStatus(HttpServletResponse.SC_OK);
+            generateBody(response, authenticationResponse);
             filterChain.doFilter(request, response);
             return;
         }
