@@ -1,8 +1,13 @@
 package com.example.cloudstorage.component;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Random;
 
 @Component
@@ -30,4 +35,20 @@ public class CloudTools {
                 .toString();
         return string;
     }
+
+    @SneakyThrows
+    public static String convertJsonToString(Object object) {
+        ObjectMapper mapper = new ObjectMapper();
+        String body = mapper.writeValueAsString(object);
+        return body;
+    }
+
+    public static void generateBody(HttpServletResponse response, Object object) throws IOException {
+        PrintWriter out = response.getWriter();
+        String body = convertJsonToString(object);
+        out.println(body);
+        out.flush();
+    }
+
+
 }

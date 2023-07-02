@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-
+//Для возврата во фронт вместо ошибки при некорректных логине или пароля
 @Getter
 @Setter
 @Data
