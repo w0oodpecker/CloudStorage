@@ -54,7 +54,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         //Проверяем на отсутствие токена
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+
+            /*
             AuthenticationRequest authenticationRequest = readRequestBody(request);
+
 
             //Проверяем существование юзера в репозитории
             final UserDetails userDetails;
@@ -75,21 +78,25 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
                 return;
             }
+
             String token = jwtService.generateToken(userDetails);
             AuthenticationResponse authenticationResponse = new AuthenticationResponse(token);
             response.setStatus(HttpServletResponse.SC_OK);
             generateBody(response, authenticationResponse);
             filterChain.doFilter(request, response);
             return;
-        }
-
-        jwt = authHeader.substring(7);
-        //Если токен есть в заросе проверяем его валидность
-        if(tokenBlackListRepository.existsById(jwt)){ //Проверка на блэклист
-            generateBody(response, new CloudError(USERUNOUTHORIZED));
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            */
             filterChain.doFilter(request, response);
             return;
+        } else {
+            jwt = authHeader.substring(7);
+            //Если токен есть в заросе проверяем его блэклисте
+            if (tokenBlackListRepository.existsById(jwt)) { //Проверка на блэклист
+                generateBody(response, new CloudError(USERUNOUTHORIZED));
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                filterChain.doFilter(request, response);
+                return;
+            }
         }
 
         login = jwtService.extractUserName(jwt);
@@ -127,10 +134,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     public void generateBody(HttpServletResponse response, Object object) throws IOException {
-            PrintWriter out = response.getWriter();
-            String body = convertJsonToString(object);
-            out.println(body);
-            out.flush();
+        PrintWriter out = response.getWriter();
+        String body = convertJsonToString(object);
+        out.println(body);
+        out.flush();
     }
 
 }

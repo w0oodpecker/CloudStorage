@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static com.example.cloudstorage.configuration.CloudMessages.BADLOGIN;
@@ -33,7 +34,7 @@ public class ApplicationConfig {
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService());
-        authProvider.setPasswordEncoder(passwordEncoder());
+        authProvider.setPasswordEncoder(noOpPasswordEncoder());
         return authProvider;
     }
 
@@ -45,9 +46,14 @@ public class ApplicationConfig {
 
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    public PasswordEncoder passwordEncoder() { return new BCryptPasswordEncoder();
     }
+
+
+    @Bean
+    public NoOpPasswordEncoder noOpPasswordEncoder() { return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();}
+
+
 }
 
 
