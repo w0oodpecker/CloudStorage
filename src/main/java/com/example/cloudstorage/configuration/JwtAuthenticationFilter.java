@@ -4,6 +4,7 @@ import com.example.cloudstorage.model.AuthenticationRequest;
 import com.example.cloudstorage.model.AuthenticationResponse;
 import com.example.cloudstorage.model.CloudError;
 import com.example.cloudstorage.repository.TokenBlackListRepository;
+import com.example.cloudstorage.service.AuthenticationService;
 import com.example.cloudstorage.service.JwtService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;

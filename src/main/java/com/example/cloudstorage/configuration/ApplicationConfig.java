@@ -13,6 +13,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import static com.example.cloudstorage.configuration.CloudMessages.BADLOGIN;
+
 
 @Configuration
 @RequiredArgsConstructor
@@ -23,7 +25,7 @@ public class ApplicationConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> usersRepository.findUserByLogin(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
+                .orElseThrow(() -> new UsernameNotFoundException(BADLOGIN));
     }
 
 
@@ -47,3 +49,5 @@ public class ApplicationConfig {
         return new BCryptPasswordEncoder();
     }
 }
+
+
