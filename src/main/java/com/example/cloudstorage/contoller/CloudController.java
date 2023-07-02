@@ -17,6 +17,7 @@ import java.util.ArrayList;
 @RequiredArgsConstructor
 public class CloudController {
 
+
     private final AuthenticationService authService;
     private final CloudFileService fileService;
 
@@ -37,6 +38,7 @@ public class CloudController {
         }
         return new ResponseEntity<>(HttpStatus.OK); //200
     }
+
 
     @DeleteMapping("/file") //Delete file
     public ResponseEntity<?> deleteFileCall(@RequestHeader("auth-token") String userAuthToken,
@@ -81,6 +83,7 @@ public class CloudController {
         }
         return new ResponseEntity<>(resource, headers, HttpStatus.OK); //200
     }
+
 
     @PutMapping("/file") //Edit file name
     public ResponseEntity<?> editFileNameCall(@RequestHeader("auth-token") String userAuthToken,

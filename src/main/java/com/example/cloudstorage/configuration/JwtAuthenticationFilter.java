@@ -2,9 +2,9 @@ package com.example.cloudstorage.configuration;
 
 import com.example.cloudstorage.model.AuthenticationRequest;
 import com.example.cloudstorage.model.AuthenticationResponse;
-import com.example.cloudstorage.service.AuthenticationService;
+import com.example.cloudstorage.model.CloudError;
+import com.example.cloudstorage.repository.TokenBlackListRepository;
 import com.example.cloudstorage.service.JwtService;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -27,14 +27,15 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
 
+import static com.example.cloudstorage.configuration.CloudMessages.*;
 
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private static final String AUTHORIZATION = "Auth-Token";
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+    private final TokenBlackListRepository tokenBlackListRepository;
 
     @Override
     public void doFilterInternal(
@@ -47,6 +48,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String jwt;
         final String login;
 
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
         //Проверяем на отсутствие токена
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             AuthenticationRequest authenticationRequest = readRequestBody(request);
@@ -56,32 +60,33 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             try {
                 userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getLogin());
             } catch (UsernameNotFoundException exc) {
+                generateBody(response, new CloudError(BADLOGIN));
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 filterChain.doFilter(request, response);
                 return;
             }
 
-            //Если юзер существует в репозитории, то проверяем пароль
-            if (authenticationRequest.getPassword().equals(userDetails.getPassword())) {
-                String token = jwtService.generateToken(userDetails);
-                response.setStatus(HttpServletResponse.SC_OK);
-                AuthenticationResponse authenticationResponse = new AuthenticationResponse(token);
-                String body = convertJsonToString(authenticationResponse);
-                PrintWriter out = response.getWriter();
-                response.setContentType("application/json");
-                response.setCharacterEncoding("UTF-8");
-                out.print(body);
-                out.flush();
-            } else {
+            //Если юзер существует в репозитории, то проверяем пароль и возвращаем ок и новый токен
+            if (!authenticationRequest.getPassword().equals(userDetails.getPassword())) {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             }
+            String token = jwtService.generateToken(userDetails);
+            AuthenticationResponse authenticationResponse = new AuthenticationResponse(token);
+            generateBody(response, authenticationResponse);
+            response.setStatus(HttpServletResponse.SC_OK);
             filterChain.doFilter(request, response);
             return;
         }
 
-
-        //Если токен есть в заросе проверяем его валидность
         jwt = authHeader.substring(7);
+        //Если токен есть в заросе проверяем его валидность
+        if(tokenBlackListRepository.existsById(jwt)){ //Проверка на блэклист
+            generateBody(response, new CloudError(USERUNOUTHORIZED));
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         login = jwtService.extractUserName(jwt);
         if (login != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(login); //Загрузка деталей пользователя из репозитория
@@ -97,7 +102,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-
     public AuthenticationRequest readRequestBody(HttpServletRequest httpServletRequest) {
         try {
             byte[] inputStreamBytes = StreamUtils.copyToByteArray(httpServletRequest.getInputStream());
@@ -110,12 +114,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
     }
 
-
     @SneakyThrows
     public String convertJsonToString(Object object) {
         ObjectMapper mapper = new ObjectMapper();
         String body = mapper.writeValueAsString(object);
         return body;
+    }
+
+    public void generateBody(HttpServletResponse response, Object object) throws IOException {
+            PrintWriter out = response.getWriter();
+            String body = convertJsonToString(object);
+            out.println(body);
+            out.flush();
     }
 
 }

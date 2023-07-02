@@ -21,4 +21,5 @@ public class AuthenticationRequest { //User credentials scheme
         this.login = login;
         this.password = password;
     }
+
 }

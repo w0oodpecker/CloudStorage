@@ -10,6 +10,7 @@ import lombok.Setter;
 public class CloudFile {
     private String filename;
     private long size;
+
 }
 
 

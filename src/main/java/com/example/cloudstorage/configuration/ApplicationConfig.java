@@ -26,6 +26,7 @@ public class ApplicationConfig {
                 .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
     }
 
+
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -40,9 +41,9 @@ public class ApplicationConfig {
         return config.getAuthenticationManager();
     }
 
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }
