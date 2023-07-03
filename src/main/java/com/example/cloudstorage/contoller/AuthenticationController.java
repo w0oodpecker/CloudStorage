@@ -22,6 +22,7 @@ public class AuthenticationController {
             response = authenticationService.authentificate(request);
         }
         catch (Exception exc){
+            //Адаптация к фронту вместо отправки объекта ошибки
             return new ResponseEntity<>(AuthenticationRequestMail
                     .builder().email(request.getLogin())
                     .password(request.getPassword())

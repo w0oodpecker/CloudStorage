@@ -43,13 +43,4 @@ public class CloudTools {
         return body;
     }
 
-    public static void generateBody(HttpServletResponse response, Object object) throws IOException {
-        PrintWriter out = response.getWriter();
-        String body = convertJsonToString(object);
-        out.println(body);
-        out.flush();
-        
-    }
-
-
 }
