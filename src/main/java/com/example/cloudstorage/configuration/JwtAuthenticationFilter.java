@@ -1,5 +1,6 @@
 package com.example.cloudstorage.configuration;
 
+import com.example.cloudstorage.component.CloudTools;
 import com.example.cloudstorage.model.CloudError;
 import com.example.cloudstorage.repository.TokenBlackListRepository;
 import com.example.cloudstorage.service.JwtService;
@@ -18,10 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
-import java.io.PrintWriter;
 
-
-import static com.example.cloudstorage.component.CloudTools.convertJsonToString;
 import static com.example.cloudstorage.configuration.CloudMessages.*;
 
 @Component
@@ -54,7 +52,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             jwt = authHeader.substring(7);
             //Если токен есть в заросе проверяем его блэклисте
             if (tokenBlackListRepository.existsById(jwt)) { //Проверка на блэклист
-                generateBody(response, new CloudError(USERUNOUTHORIZED));
+                CloudTools.generateBody(response, new CloudError(USERUNOUTHORIZED));
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 filterChain.doFilter(request, response);
                 return;
@@ -74,14 +72,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         }
         filterChain.doFilter(request, response);
-    }
-
-
-    public static void generateBody(HttpServletResponse response, Object object) throws IOException {
-        PrintWriter out = response.getWriter();
-        String body = convertJsonToString(object);
-        out.println(body);
-        out.flush();
     }
 
 }
