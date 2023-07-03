@@ -55,7 +55,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             //Если токен есть в заросе проверяем его блэклисте
             if (tokenBlackListRepository.existsById(jwt)) { //Проверка на блэклист
                 CloudTools.generateBody(response, new CloudError(USERUNOUTHORIZED));
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 filterChain.doFilter(request, response);
                 return;
             }

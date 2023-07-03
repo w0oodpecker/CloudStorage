@@ -32,9 +32,6 @@ public class CloudController {
         } catch (InputDataException exc) {
             CloudError error = new CloudError(exc.getMessage());
             return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST); //400
-        } catch (UnauthorizedException exc) {
-            CloudError error = new CloudError(exc.getMessage());
-            return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED); //401
         }
         return new ResponseEntity<>(HttpStatus.OK); //200
     }
@@ -48,9 +45,6 @@ public class CloudController {
         } catch (InputDataException exc) {
             CloudError error = new CloudError(exc.getMessage());
             return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST); //400
-        } catch (UnauthorizedException exc) {
-            CloudError error = new CloudError(exc.getMessage());
-            return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED); //401
         } catch (DeleteFileException exc) {
             CloudError error = new CloudError(exc.getMessage());
             return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR); //500
@@ -74,9 +68,6 @@ public class CloudController {
         } catch (InputDataException exc) {
             CloudError error = new CloudError(exc.getMessage());
             return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST); //400
-        } catch (UnauthorizedException exc) {
-            CloudError error = new CloudError(exc.getMessage());
-            return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED); //401
         } catch (RuntimeException exc) {
             CloudError error = new CloudError(exc.getMessage());
             return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR); //500
@@ -94,9 +85,6 @@ public class CloudController {
         } catch (InputDataException exc) {
             CloudError error = new CloudError(exc.getMessage());
             return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST); //400
-        } catch (UnauthorizedException exc) {
-            CloudError error = new CloudError(exc.getMessage());
-            return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED); //401
         } catch (RenameFileException exc) {
             CloudError error = new CloudError(exc.getMessage());
             return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR); //500
@@ -114,9 +102,6 @@ public class CloudController {
         } catch (InputDataException exc) {
             CloudError error = new CloudError(exc.getMessage());
             return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST); //400
-        } catch (UnauthorizedException exc) {
-            CloudError error = new CloudError(exc.getMessage());
-            return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED); //401
         } catch (GettingFileListException exc) {
             CloudError error = new CloudError(exc.getMessage());
             return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR); //500
