@@ -37,10 +37,12 @@ Content-Type: application/json
   "password": "222222"
 }
 
+
 ###
 //Логаут неавторизованного юзера (скопировать и вставить токен после аутентификации)
 POST http://localhost:8070/logout
 Auth-Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpdmFub3ZAbWFpbC5ydSIsImlhdCI6MTY4ODM5MzQ3NiwiZXhwIjoxNjg4Mzk0NDc3fQ.CnzDEzrlIpeRUZy0N7_V3vo-gX9He_DST5tuGtplDEk
+
 
 ###
 //Переименование файла: заменить токен после логина, создать файл и выполнить тест
@@ -52,7 +54,8 @@ Auth-Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpdmFub3ZAbWFpbC5ydSIsImlhdCI6
   "filename": "newNameOfFile.txt"
 }
 
+
 ###
 //Удаление файла: заменить токен посел логина, созать файл и выполнить тест
 DELETE http://localhost:8070/file?filename=newNameOfFile.txt
-Auth-Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpdmFub3ZAbWFpbC5ydSIsImlhdCI6MTY4ODQwOTYxMywiZXhwIjoxNjg4NDEwNjE0fQ.cMFIhVZ_bArLzwJfVPLGDCxKEyF2-czK72qru2Vqpdw
+Auth-Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpdmFub3ZAbWFpbC5ydSIsImlhdCI6MTY4ODQxMDkxMSwiZXhwIjoxNjg4NDExOTEyfQ.yv0bG_2IixRo2JWobqTMA_Pd0kj8tzqKB4Tj6u46GV0

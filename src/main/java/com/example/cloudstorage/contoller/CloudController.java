@@ -3,7 +3,6 @@ package com.example.cloudstorage.contoller;
 import com.example.cloudstorage.exceptions.*;
 import com.example.cloudstorage.model.CloudError;
 import com.example.cloudstorage.model.CloudFile;
-import com.example.cloudstorage.service.AuthenticationService;
 import com.example.cloudstorage.service.CloudFileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.FileSystemResource;
@@ -17,10 +16,7 @@ import java.util.ArrayList;
 @RequiredArgsConstructor
 public class CloudController {
 
-
-    private final AuthenticationService authService;
     private final CloudFileService fileService;
-
 
     @PostMapping(value = "/file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     //Upload file to server
