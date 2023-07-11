@@ -26,10 +26,10 @@ public class AuthenticationControllerTest {
         when(mAuthService.authentificate(authReqOk)).thenReturn(authResp);
         when(mAuthService.authentificate(authReqErr)).thenThrow(RuntimeException.class);
 
-        ResponseEntity<?> resp_ok = authController.login(authReqOk);
-        ResponseEntity<?> resp_err = authController.login(authReqErr);
+        ResponseEntity<?> resp200 = authController.login(authReqOk);
+        ResponseEntity<?> resp400 = authController.login(authReqErr);
 
-        Assertions.assertTrue(resp_ok.getStatusCodeValue() == 200);
-        Assertions.assertTrue(resp_err.getStatusCodeValue() == 400);
+        Assertions.assertTrue(resp200.getStatusCodeValue() == 200);
+        Assertions.assertTrue(resp400.getStatusCodeValue() == 400);
     }
 }

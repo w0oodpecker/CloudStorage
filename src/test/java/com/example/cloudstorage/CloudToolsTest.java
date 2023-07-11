@@ -8,7 +8,7 @@ public class CloudToolsTest {
 
     @Test
     public void testGetRandomCode(){
-        String string = new CloudTools(48,57,6).getRandomCode();
+        String string = CloudTools.getRandomCode();
         Assertions.assertEquals(6, string.length());
     }
 }

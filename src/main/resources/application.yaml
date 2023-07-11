@@ -27,8 +27,6 @@ jwt:
     access: 8dfbf1c431968a3841fb99d6c3216b1d436a89b3f9d228002b65a4876c5c9663 #Secret key for generation of tokens
 error:
     id:
-      leftlimit: 48 #Paramters for random generation
-      rightlimit: 57
-      lenght: 6
+      randomlenght: 6
 files:
   path: d:/Users/vlad/Documents/Code/CloudStorage/FilesFolder #Folder for files

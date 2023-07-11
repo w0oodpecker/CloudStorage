@@ -20,7 +20,7 @@ public class CloudController {
 
     @PostMapping(value = "/file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     //Upload file to server
-    public ResponseEntity<?> fileUploadCall(@RequestHeader("auth-token") String userAuthToken,
+    public ResponseEntity<?> fileUploadCall(//@RequestHeader("auth-token") String userAuthToken,
                                             @RequestParam("filename") String fileName,
                                             @RequestParam("file") MultipartFile file) {
         try {
@@ -34,7 +34,7 @@ public class CloudController {
 
 
     @DeleteMapping("/file") //Delete file
-    public ResponseEntity<?> deleteFileCall(@RequestHeader("auth-token") String userAuthToken,
+    public ResponseEntity<?> deleteFileCall(//@RequestHeader("auth-token") String userAuthToken,
                                             @RequestParam("filename") String fileName) {
         try {
             fileService.deleteFile(fileName);
@@ -50,7 +50,7 @@ public class CloudController {
 
 
     @GetMapping("/file") //Download file from cloud
-    public ResponseEntity<?> downloadFileCall(@RequestHeader("auth-token") String userAuthToken,
+    public ResponseEntity<?> downloadFileCall(//@RequestHeader("auth-token") String userAuthToken,
                                               @RequestParam("filename") String fileName) {
         FileSystemResource resource;
         HttpHeaders headers;
@@ -73,7 +73,7 @@ public class CloudController {
 
 
     @PutMapping("/file") //Edit file name
-    public ResponseEntity<?> editFileNameCall(@RequestHeader("auth-token") String userAuthToken,
+    public ResponseEntity<?> editFileNameCall(//@RequestHeader("auth-token") String userAuthToken,
                                               @RequestParam("filename") String fileName,
                                               @RequestBody CloudFile newFile) {
         try {
@@ -90,7 +90,7 @@ public class CloudController {
 
 
     @GetMapping("/list") //Get all files
-    public ResponseEntity<?> listFilesCall(@RequestHeader("auth-token") String userAuthToken,
+    public ResponseEntity<?> listFilesCall(//@RequestHeader("auth-token") String userAuthToken,
                                            @RequestParam("limit") int limit) {
         ArrayList<?> fileList;
         try {
