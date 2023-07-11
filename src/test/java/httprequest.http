@@ -48,7 +48,7 @@ Auth-Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpdmFub3ZAbWFpbC5ydSIsImlhdCI6
 //Переименование файла: заменить токен после логина, создать файл и выполнить тест
 PUT http://localhost:8070/file?filename=sourceTestFile.txt
 Content-Type: application/json
-Auth-Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpdmFub3ZAbWFpbC5ydSIsImlhdCI6MTY4ODQwOTYxMywiZXhwIjoxNjg4NDEwNjE0fQ.cMFIhVZ_bArLzwJfVPLGDCxKEyF2-czK72qru2Vqpdw
+Auth-Token: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpdmFub3ZAbWFpbC5ydSIsImlhdCI6MTY4ODY2OTY5OSwiZXhwIjoxNjg4NjcwNzAxfQ.wTH_BM0hnY2EM9AWog-kbxP0z-wlACaxgIxbpL57UFo
 
 {
   "filename": "newNameOfFile.txt"

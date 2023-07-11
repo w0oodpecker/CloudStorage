@@ -13,6 +13,7 @@ import javax.persistence.Table;
 @Entity
 @Builder
 @Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "t_tokenblacklist")

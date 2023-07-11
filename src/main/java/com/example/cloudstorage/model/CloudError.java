@@ -18,5 +18,4 @@ public class CloudError {
         this.id = Integer.parseInt(CloudTools.getRandomCode());
         this.message = message;
     }
-
 }
