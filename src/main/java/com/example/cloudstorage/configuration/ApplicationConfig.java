@@ -2,6 +2,7 @@ package com.example.cloudstorage.configuration;
 
 import com.example.cloudstorage.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,7 +16,6 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static com.example.cloudstorage.configuration.CloudMessages.BADLOGIN;
-
 
 @Configuration
 @RequiredArgsConstructor

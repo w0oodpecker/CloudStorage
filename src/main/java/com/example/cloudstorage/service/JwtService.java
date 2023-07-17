@@ -19,7 +19,7 @@ public class JwtService {
 
     private final String jwtAccessSecret;
 
-    JwtService(@Value("${jwt.secret.access}") String jwtAccessSecret) {
+    public JwtService(@Value("${jwt.secret.access}") String jwtAccessSecret) {
         this.jwtAccessSecret = jwtAccessSecret;
     }
 

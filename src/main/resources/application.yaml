@@ -1,5 +1,6 @@
 server:
-  port: 8070
+  port: 8080
+  allowedOrigins: "http://localhost:8081"
 spring:
   sql:
     init:
@@ -25,8 +26,5 @@ logging:
 jwt:
   secret:
     access: 8dfbf1c431968a3841fb99d6c3216b1d436a89b3f9d228002b65a4876c5c9663 #Secret key for generation of tokens
-error:
-    id:
-      randomlenght: 6
 files:
-  path: d:/Users/vlad/Documents/Code/CloudStorage/FilesFolder #Folder for files
+  path: src/main/FilesFolder #Folder for files

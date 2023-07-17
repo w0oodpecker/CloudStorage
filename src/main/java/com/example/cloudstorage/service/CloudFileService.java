@@ -17,7 +17,7 @@ public class CloudFileService {
 
     private final String filesPath;
 
-    CloudFileService(@Value("${files.path}") String filesPath) {
+    public CloudFileService(@Value("${files.path}") String filesPath) {
         this.filesPath = filesPath;
     }
 

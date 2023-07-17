@@ -2,8 +2,8 @@ package com.example.cloudstorage.service;
 
 import com.example.cloudstorage.model.AuthenticationRequest;
 import com.example.cloudstorage.model.AuthenticationResponse;
+import com.example.cloudstorage.model.User;
 import com.example.cloudstorage.repository.UsersRepository;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,10 +22,9 @@ public class AuthenticationService {
                 UsernamePasswordAuthenticationToken(
                         request.getLogin(),
                         request.getPassword()));
-        var user = repository.findUserByLogin(request.getLogin())
+        User user = repository.findUserByLogin(request.getLogin())
                 .orElseThrow();
-        var jwtToken = jwtService.generateToken(user);
+        String jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder().accessToken(jwtToken).build();
     }
-
 }
