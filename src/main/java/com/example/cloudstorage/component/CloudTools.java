@@ -2,6 +2,7 @@ package com.example.cloudstorage.component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -11,9 +12,11 @@ import java.util.Random;
 
 public class CloudTools {
 
+    @Value("${error.lenght}")
+    public static int lenght;
+
     /*Генератор случайной строки*/
     public static String getRandomCode() {
-        int lenght = 6;
         Random random = new Random();
         String string = random.ints(48, 57 + 1)
                 .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
