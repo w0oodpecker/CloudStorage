@@ -1,0 +1,9 @@
+version: "1.0"
+
+services:
+  cloudstorage:
+    build:
+      dockerfile: "Dockerfile"
+    image: "cloudstorage:latest"
+    ports:
+      - "8080:8080"
