@@ -1,6 +1,6 @@
 server:
   port: 8080
-  allowedOrigins: "http://localhost:8081"
+  allowedOrigins: http://localhost:8081
 spring:
   sql:
     init:
@@ -14,7 +14,7 @@ spring:
       ddl-auto: update
   show-sql: true
   datasource:
-    url: jdbc:mysql://localhost:3306/cloudstorage
+    url: jdbc:mysql://192.168.0.131:3306/cloudstorage
     username: root
     password: password
 logging:
@@ -27,4 +27,4 @@ jwt:
   secret:
     access: 8dfbf1c431968a3841fb99d6c3216b1d436a89b3f9d228002b65a4876c5c9663 #Secret key for generation of tokens
 files:
-  path: src/main/FilesFolder #Folder for files
+  path: FilesFolder #Folder for files
