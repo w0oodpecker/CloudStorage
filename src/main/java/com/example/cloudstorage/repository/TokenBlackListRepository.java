@@ -1,18 +1,18 @@
 package com.example.cloudstorage.repository;
 
-import com.example.cloudstorage.model.AuthenticationResponse;
+import com.example.cloudstorage.model.PoorToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import javax.transaction.Transactional;
 
 
 @Transactional
-public interface TokenBlackListRepository extends JpaRepository<AuthenticationResponse, String> {
+public interface TokenBlackListRepository extends JpaRepository<PoorToken, String> {
 
     @Override
     boolean existsById(String s);
 
     @Override
-    <S extends AuthenticationResponse> S save(S entity);
+    <S extends PoorToken> S save(S entity);
 
     @Override
     void deleteById(String token);

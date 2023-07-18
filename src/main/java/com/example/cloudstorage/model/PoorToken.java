@@ -17,7 +17,7 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "t_tokenblacklist")
-public class AuthenticationResponse {
+public class  PoorToken{
     @Id
     @Column(nullable = false)
     @JsonProperty("auth-token")

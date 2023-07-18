@@ -1,8 +1,8 @@
 package com.example.cloudstorage.configuration;
 
 import com.example.cloudstorage.component.CloudTools;
-import com.example.cloudstorage.model.AuthenticationResponse;
 import com.example.cloudstorage.model.CloudError;
+import com.example.cloudstorage.model.PoorToken;
 import com.example.cloudstorage.repository.TokenBlackListRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -37,7 +37,7 @@ public class JwtLogoutHandler implements LogoutHandler {
         if (authHeader != null) {
             if (authHeader.startsWith("Bearer ")) {
                 jwt = authHeader.substring(7);
-                tokenBlackListRepository.save(new AuthenticationResponse(jwt));
+                tokenBlackListRepository.save(new PoorToken(jwt));
             }
         } else {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

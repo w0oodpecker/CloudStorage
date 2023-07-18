@@ -1,8 +1,6 @@
 package com.example.cloudstorage.service;
 
 import com.example.cloudstorage.dto.AuthenticationDto;
-import com.example.cloudstorage.model.AuthenticationRequest;
-import com.example.cloudstorage.model.AuthenticationResponse;
 import com.example.cloudstorage.model.User;
 import com.example.cloudstorage.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
