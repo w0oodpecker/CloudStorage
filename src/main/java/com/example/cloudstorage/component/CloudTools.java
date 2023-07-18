@@ -18,19 +18,17 @@ public class CloudTools {
     /*Генератор случайной строки*/
     public static String getRandomCode() {
         Random random = new Random();
-        String string = random.ints(48, 57 + 1)
+        return random.ints(48, 57 + 1)
                 .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
                 .limit(lenght)
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                 .toString();
-        return string;
     }
 
     @SneakyThrows
     public static String convertJsonToString(Object object) {
         ObjectMapper mapper = new ObjectMapper();
-        String body = mapper.writeValueAsString(object);
-        return body;
+        return mapper.writeValueAsString(object);
     }
 
     public static void generateBody(HttpServletResponse response, Object object) throws IOException {

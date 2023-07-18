@@ -13,20 +13,21 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import java.io.File;
+import java.io.IOException;
 
 import static org.mockito.Mockito.*;
 
 public class CloudControllerTest {
 
     @Test
-    public void testFileUploadCall() throws InputDataException {
+    public void testFileUploadCall() throws InputDataException, IOException {
         CloudFileService mCloudFileService = Mockito.mock(CloudFileService.class);
         CloudController cloudController = new CloudController(mCloudFileService);
 
         MockMultipartFile mockMultipartFile = new MockMultipartFile("data", "filename.txt", "text/plain", "some xml".getBytes());
 
-        doNothing().when(mCloudFileService).uploadFile("filenameOk.200", mockMultipartFile);
-        doThrow(new InputDataException("400")).when(mCloudFileService).uploadFile("filenameErr.400", mockMultipartFile);
+        doNothing().when(mCloudFileService).uploadFile("filenameOk.200", mockMultipartFile.getBytes());
+        doThrow(new InputDataException("400")).when(mCloudFileService).uploadFile("filenameErr.400", mockMultipartFile.getBytes());
 
         ResponseEntity<?> resp200 = cloudController.fileUploadCall("filenameOk.200", mockMultipartFile);
         ResponseEntity<?> resp400 = cloudController.fileUploadCall("filenameErr.400", mockMultipartFile);

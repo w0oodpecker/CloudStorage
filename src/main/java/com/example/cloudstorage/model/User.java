@@ -1,6 +1,5 @@
 package com.example.cloudstorage.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,10 +20,10 @@ import java.util.Collection;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table (name = "t_user")
+@Table(name = "t_user")
 public class User implements UserDetails {
     @Id
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false)
     private String login;
     @Column(nullable = false, length = 32)
     private String password;

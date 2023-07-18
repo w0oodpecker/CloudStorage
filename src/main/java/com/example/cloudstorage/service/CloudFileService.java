@@ -5,12 +5,12 @@ import com.example.cloudstorage.model.CloudFile;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import static com.example.cloudstorage.configuration.CloudMessages.*;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class CloudFileService {
@@ -26,7 +26,7 @@ public class CloudFileService {
         if (!dir.exists()) throw new InputDataException(FOLDERNOTFOUND);
         List<CloudFile> lst = new ArrayList<>();
         try {
-            for (File file : dir.listFiles()) {
+            for (File file : Objects.requireNonNull(dir.listFiles())) {
                 if (file.isFile())
                     lst.add(new CloudFile(file.getName(), file.length()));
             }
@@ -49,7 +49,7 @@ public class CloudFileService {
         try {
             //byte[] bytes = file.getBytes();
             BufferedOutputStream stream =
-                    new BufferedOutputStream(new FileOutputStream(new File(filesPath + "/" + fileName)));
+                    new BufferedOutputStream(new FileOutputStream(filesPath + "/" + fileName));
             stream.write(bytes);
             stream.close();
         } catch (IOException exc) {

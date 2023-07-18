@@ -33,7 +33,7 @@ public class CloudFileServiceTest {
     @Test
     public void testUploadFile(){
         MultipartFile file = new MockMultipartFile("foo", "foo.txt", MediaType.TEXT_PLAIN_VALUE, "Hello World".getBytes());
-        Assertions.assertDoesNotThrow(() -> new CloudFileService("src/test/TestFolder").uploadFile("uploadtest.txt", file));
+        Assertions.assertDoesNotThrow(() -> new CloudFileService("src/test/TestFolder").uploadFile("uploadtest.txt", file.getBytes()));
     }
 
     @Test

@@ -8,7 +8,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CloudError {
-
     @JsonProperty("id")
     private Integer id;
     @JsonProperty("message")

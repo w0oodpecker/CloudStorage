@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
@@ -61,7 +62,7 @@ public class CloudController {
             MediaType mediaType = MediaType.MULTIPART_FORM_DATA;
             headers = new HttpHeaders();
             headers.setContentType(mediaType);
-            ContentDisposition disposition = ContentDisposition.inline().filename(resource.getFilename()).build();
+            ContentDisposition disposition = ContentDisposition.inline().filename(Objects.requireNonNull(resource.getFilename())).build();
             headers.setContentDisposition(disposition);
         } catch (InputDataException exc) {
             CloudError error = new CloudError(exc.getMessage());

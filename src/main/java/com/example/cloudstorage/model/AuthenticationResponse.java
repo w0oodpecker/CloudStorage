@@ -18,15 +18,11 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @Table(name = "t_tokenblacklist")
 public class AuthenticationResponse {
-
     @Id
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false)
     @JsonProperty("auth-token")
     private String accessToken;
-
-    public String getAccessToken() {
-        return accessToken;
-    }
-
 }
+
+
 

@@ -9,6 +9,7 @@ import lombok.SneakyThrows;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.stereotype.Service;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
@@ -16,13 +17,11 @@ import javax.validation.constraints.NotNull;
 import static com.example.cloudstorage.configuration.CloudMessages.AUTHORIZATION;
 import static com.example.cloudstorage.configuration.CloudMessages.USERUNOUTHORIZED;
 
-
 @Service
 @RequiredArgsConstructor
 public class JwtLogoutHandler implements LogoutHandler {
 
     private final TokenBlackListRepository tokenBlackListRepository;
-
 
     @SneakyThrows
     @Override
@@ -35,12 +34,12 @@ public class JwtLogoutHandler implements LogoutHandler {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        try {
-            if (authHeader != null || authHeader.startsWith("Bearer ")) {
+        if (authHeader != null) {
+            if (authHeader.startsWith("Bearer ")) {
                 jwt = authHeader.substring(7);
                 tokenBlackListRepository.save(new AuthenticationResponse(jwt));
             }
-        } catch (NullPointerException exc) {
+        } else {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             CloudTools.generateBody(response, new CloudError(USERUNOUTHORIZED));
         }
