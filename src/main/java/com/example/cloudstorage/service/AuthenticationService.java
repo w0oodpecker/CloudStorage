@@ -1,5 +1,6 @@
 package com.example.cloudstorage.service;
 
+import com.example.cloudstorage.dto.AuthenticationDto;
 import com.example.cloudstorage.model.AuthenticationRequest;
 import com.example.cloudstorage.model.AuthenticationResponse;
 import com.example.cloudstorage.model.User;
@@ -17,7 +18,7 @@ public class AuthenticationService {
     private final UsersRepository repository;
     private final JwtService jwtService;
 
-    public AuthenticationResponse authentificate(AuthenticationRequest request){
+    public AuthenticationDto.ResponseAuth.Create authentificate(AuthenticationDto.RequestAuth.Create request){
         authenticationManager.authenticate(new
                 UsernamePasswordAuthenticationToken(
                         request.getLogin(),
@@ -25,6 +26,7 @@ public class AuthenticationService {
         User user = repository.findUserByLogin(request.getLogin())
                 .orElseThrow();
         String jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder().accessToken(jwtToken).build();
+        return new AuthenticationDto.ResponseAuth.Create(jwtToken);
+        //return AuthenticationResponse.builder().accessToken(jwtToken).build();
     }
 }
