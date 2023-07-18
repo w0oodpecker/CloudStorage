@@ -10,6 +10,7 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 @RestController
@@ -24,8 +25,9 @@ public class CloudController {
                                             @RequestParam("filename") String fileName,
                                             @RequestParam("file") MultipartFile file) {
         try {
-            fileService.uploadFile(fileName, file);
-        } catch (InputDataException exc) {
+            byte[] bytes = file.getBytes();
+            fileService.uploadFile(fileName, bytes);
+        } catch (InputDataException | IOException exc) {
             CloudError error = new CloudError(exc.getMessage());
             return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST); //400
         }

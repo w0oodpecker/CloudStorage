@@ -45,9 +45,9 @@ public class CloudFileService {
         }
     }
 
-    public void uploadFile(String fileName, MultipartFile file) throws InputDataException { //Загрузка файла
+    public void uploadFile(String fileName, /*MultipartFile file*/ byte[] bytes) throws InputDataException { //Загрузка файла
         try {
-            byte[] bytes = file.getBytes();
+            //byte[] bytes = file.getBytes();
             BufferedOutputStream stream =
                     new BufferedOutputStream(new FileOutputStream(new File(filesPath + "/" + fileName)));
             stream.write(bytes);
