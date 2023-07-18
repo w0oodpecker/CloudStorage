@@ -2,6 +2,7 @@ package com.example.cloudstorage.configuration;
 
 import com.example.cloudstorage.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static com.example.cloudstorage.configuration.CloudMessages.BADLOGIN;
 
+@Log4j2
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfig {
@@ -28,7 +30,6 @@ public class ApplicationConfig {
                 .orElseThrow(() -> new UsernameNotFoundException(BADLOGIN));
     }
 
-
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -37,22 +38,17 @@ public class ApplicationConfig {
         return authProvider;
     }
 
-
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
-
     @Bean
     public PasswordEncoder passwordEncoder() { return new BCryptPasswordEncoder();
     }
 
-
     @Bean
     public NoOpPasswordEncoder noOpPasswordEncoder() { return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();}
-
-
 }
 
 
