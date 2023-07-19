@@ -25,7 +25,7 @@ public class CloudController {
                                             @RequestParam("filename") String fileName,
                                             @RequestParam("file") MultipartFile file) {
         try {
-            var request = new CloudFileDto.RequestUploadFile.Create(fileName, file.getBytes());
+            var request = new CloudFileDto.RequestUploadFile.Ask(fileName, file.getBytes());
             fileService.uploadFile(request);
         } catch (InputDataException | IOException exc) {
             CloudError error = new CloudError(exc.getMessage());
@@ -39,7 +39,7 @@ public class CloudController {
     public ResponseEntity<?> deleteFileCall(//@RequestHeader("auth-token") String userAuthToken,
                                             @RequestParam("filename") String fileName) {
         try {
-            var request = new CloudFileDto.RequestDeleteFile.Create(fileName);
+            var request = new CloudFileDto.RequestDeleteFile.Ask(fileName);
             fileService.deleteFile(request);
         } catch (InputDataException exc) {
             CloudError error = new CloudError(exc.getMessage());
@@ -55,10 +55,10 @@ public class CloudController {
     @GetMapping("/file") //Download file from cloud
     public ResponseEntity<?> downloadFileCall(//@RequestHeader("auth-token") String userAuthToken,
                                               @RequestParam("filename") String fileName) {
-        CloudFileDto.ResponseDownloadFile.Create response;
+        CloudFileDto.ResponseDownloadFile.Answer response;
         HttpHeaders headers;
         try {
-            var request = new CloudFileDto.RequestDownloadFile.Create(fileName);
+            var request = new CloudFileDto.RequestDownloadFile.Ask(fileName);
             response = fileService.downloadFile(request);
             MediaType mediaType = MediaType.MULTIPART_FORM_DATA;
             headers = new HttpHeaders();
@@ -82,7 +82,7 @@ public class CloudController {
                                               @RequestParam("filename") String sourceFileName,
                                               @RequestBody CloudFile newFile) {
         try {
-            var request = new CloudFileDto.RequestEditFile.Create(sourceFileName, newFile.getFilename());
+            var request = new CloudFileDto.RequestEditFile.Ask(sourceFileName, newFile.getFilename());
             fileService.renameFile(request);
         } catch (InputDataException exc) {
             CloudError error = new CloudError(exc.getMessage());
@@ -98,7 +98,7 @@ public class CloudController {
     @GetMapping("/list") //Get all files
     public ResponseEntity<?> listFilesCall(//@RequestHeader("auth-token") String userAuthToken,
                                            @RequestParam("limit") int limit) {
-        CloudFileDto.ResponseGetFileList.Create response;
+        CloudFileDto.ResponseGetFileList.Answer response;
         try {
             response = fileService.getFileList();
         } catch (InputDataException exc) {

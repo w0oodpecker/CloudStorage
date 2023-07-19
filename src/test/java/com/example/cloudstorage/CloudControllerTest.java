@@ -10,10 +10,8 @@ import com.example.cloudstorage.service.CloudFileService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
-import java.io.File;
 import java.io.IOException;
 
 import static org.mockito.Mockito.*;
@@ -26,8 +24,8 @@ public class CloudControllerTest {
         CloudController cloudController = new CloudController(mCloudFileService);
 
         MockMultipartFile mockMultipartFile = new MockMultipartFile("data", "filename.txt", "text/plain", "some xml".getBytes());
-        var requestOk = new CloudFileDto.RequestUploadFile.Create("filenameOk.200", mockMultipartFile.getBytes());
-        var requestErr = new CloudFileDto.RequestUploadFile.Create("filenameOk.400", mockMultipartFile.getBytes());
+        var requestOk = new CloudFileDto.RequestUploadFile.Ask("filenameOk.200", mockMultipartFile.getBytes());
+        var requestErr = new CloudFileDto.RequestUploadFile.Ask("filenameOk.400", mockMultipartFile.getBytes());
 
         doNothing().when(mCloudFileService).uploadFile(requestOk);
         doThrow(new InputDataException("400")).when(mCloudFileService).uploadFile(requestErr);
@@ -45,9 +43,9 @@ public class CloudControllerTest {
         CloudFileService mCloudFileService = Mockito.mock(CloudFileService.class);
         CloudController cloudController = new CloudController(mCloudFileService);
 
-        doThrow(new InputDataException("400")).when(mCloudFileService).deleteFile(new CloudFileDto.RequestDeleteFile.Create("filenameErr.400"));
-        doThrow(new DeleteFileException("500")).when(mCloudFileService).deleteFile(new CloudFileDto.RequestDeleteFile.Create("filenameErr.500"));
-        doNothing().when(mCloudFileService).deleteFile(new CloudFileDto.RequestDeleteFile.Create("filenameOk.200"));
+        doThrow(new InputDataException("400")).when(mCloudFileService).deleteFile(new CloudFileDto.RequestDeleteFile.Ask("filenameErr.400"));
+        doThrow(new DeleteFileException("500")).when(mCloudFileService).deleteFile(new CloudFileDto.RequestDeleteFile.Ask("filenameErr.500"));
+        doNothing().when(mCloudFileService).deleteFile(new CloudFileDto.RequestDeleteFile.Ask("filenameOk.200"));
 
         ResponseEntity<?> resp400 = cloudController.deleteFileCall("filenameErr.400");
         ResponseEntity<?> resp500 = cloudController.deleteFileCall("filenameErr.500");
@@ -64,8 +62,8 @@ public class CloudControllerTest {
         CloudFileService mCloudFileService = Mockito.mock(CloudFileService.class);
         CloudController cloudController = new CloudController(mCloudFileService);
 
-        CloudFileDto.RequestDownloadFile.Create request400 = new CloudFileDto.RequestDownloadFile.Create("filename.400");
-        CloudFileDto.RequestDownloadFile.Create request500 = new CloudFileDto.RequestDownloadFile.Create("filename.500");
+        CloudFileDto.RequestDownloadFile.Ask request400 = new CloudFileDto.RequestDownloadFile.Ask("filename.400");
+        CloudFileDto.RequestDownloadFile.Ask request500 = new CloudFileDto.RequestDownloadFile.Ask("filename.500");
 
         doThrow(new InputDataException("400")).when(mCloudFileService).downloadFile(request400);
         doThrow(new RuntimeException("500")).when(mCloudFileService).downloadFile(request500);
@@ -85,9 +83,9 @@ public class CloudControllerTest {
 
         CloudFile cloudFile = new CloudFile("newfile.txt", 300);
 
-        doThrow(new InputDataException("400")).when(mCloudFileService).renameFile(new CloudFileDto.RequestEditFile.Create("filename.400", cloudFile.getFilename()));
-        doThrow(new RenameFileException("500")).when(mCloudFileService).renameFile(new CloudFileDto.RequestEditFile.Create("filename.500", cloudFile.getFilename()));
-        doNothing().when(mCloudFileService).renameFile(new CloudFileDto.RequestEditFile.Create("filename.200", cloudFile.getFilename()));
+        doThrow(new InputDataException("400")).when(mCloudFileService).renameFile(new CloudFileDto.RequestEditFile.Ask("filename.400", cloudFile.getFilename()));
+        doThrow(new RenameFileException("500")).when(mCloudFileService).renameFile(new CloudFileDto.RequestEditFile.Ask("filename.500", cloudFile.getFilename()));
+        doNothing().when(mCloudFileService).renameFile(new CloudFileDto.RequestEditFile.Ask("filename.200", cloudFile.getFilename()));
 
         ResponseEntity<?> resp200 = cloudController.editFileNameCall("filename.200", cloudFile);
         ResponseEntity<?> resp400 = cloudController.editFileNameCall("filename.400", cloudFile);

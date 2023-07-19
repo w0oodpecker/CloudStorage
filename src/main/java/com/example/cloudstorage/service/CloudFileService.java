@@ -22,7 +22,7 @@ public class CloudFileService {
         this.filesPath = filesPath;
     }
 
-    public CloudFileDto.ResponseGetFileList.Create getFileList() throws InputDataException, GettingFileListException { //Получение списка файлов репозитория
+    public CloudFileDto.ResponseGetFileList.Answer getFileList() throws InputDataException, GettingFileListException { //Получение списка файлов репозитория
         File dir = new File(filesPath);
         if (!dir.exists()) throw new InputDataException(FOLDERNOTFOUND);
         List<CloudFile> lst = new ArrayList<>();
@@ -34,10 +34,10 @@ public class CloudFileService {
         } catch (NullPointerException exc) {
             throw new GettingFileListException(CLOUDSTOREERROR);
         }
-        return new CloudFileDto.ResponseGetFileList.Create(lst);
+        return new CloudFileDto.ResponseGetFileList.Answer(lst);
     }
 
-    public void deleteFile(CloudFileDto.RequestDeleteFile.Create request) throws InputDataException, DeleteFileException { //Удаление файла
+    public void deleteFile(CloudFileDto.RequestDeleteFile.Ask request) throws InputDataException, DeleteFileException { //Удаление файла
         File file = new File(filesPath + "/" + request.getSourceFileName());
         if (!file.exists() || !file.isFile())
             throw new InputDataException(FILENOTFOUND);
@@ -46,7 +46,7 @@ public class CloudFileService {
         }
     }
 
-    public void uploadFile(CloudFileDto.RequestUploadFile.Create request) throws InputDataException { //Загрузка файла
+    public void uploadFile(CloudFileDto.RequestUploadFile.Ask request) throws InputDataException { //Загрузка файла
         try {
             BufferedOutputStream stream =
                     new BufferedOutputStream(new FileOutputStream(filesPath + "/" + request.getTargetFileName()));
@@ -57,16 +57,16 @@ public class CloudFileService {
         }
     }
 
-    public CloudFileDto.ResponseDownloadFile.Create downloadFile(CloudFileDto.RequestDownloadFile.Create request) throws InputDataException { //Запрос файла
+    public CloudFileDto.ResponseDownloadFile.Answer downloadFile(CloudFileDto.RequestDownloadFile.Ask request) throws InputDataException { //Запрос файла
         FileSystemResource resource;
         resource = new FileSystemResource(filesPath + "/" + request.getSourceFileName());
         if (!resource.exists() | !resource.isFile() | !resource.isReadable()) {
             throw new InputDataException(FILEREADERROR);
         }
-        return new CloudFileDto.ResponseDownloadFile.Create(resource);
+        return new CloudFileDto.ResponseDownloadFile.Answer(resource);
     }
 
-    public void renameFile(CloudFileDto.RequestEditFile.Create request) throws InputDataException, RenameFileException {
+    public void renameFile(CloudFileDto.RequestEditFile.Ask request) throws InputDataException, RenameFileException {
         File sourcFile = new File(filesPath + "/" + request.getSourceFileName());
         if (!sourcFile.exists() | sourcFile.isDirectory()) {
             throw new InputDataException(FILENOTFOUND);

@@ -16,7 +16,7 @@ public class AuthenticationService {
     private final UsersRepository repository;
     private final JwtService jwtService;
 
-    public AuthenticationDto.ResponseAuth.Create authentificate(AuthenticationDto.RequestAuth.Create request){
+    public AuthenticationDto.ResponseAuth.Answer authentificate(AuthenticationDto.RequestAuth.Ask request){
         authenticationManager.authenticate(new
                 UsernamePasswordAuthenticationToken(
                         request.getLogin(),
@@ -24,7 +24,6 @@ public class AuthenticationService {
         User user = repository.findUserByLogin(request.getLogin())
                 .orElseThrow();
         String jwtToken = jwtService.generateToken(user);
-        return new AuthenticationDto.ResponseAuth.Create(jwtToken);
-        //return AuthenticationResponse.builder().accessToken(jwtToken).build();
+        return new AuthenticationDto.ResponseAuth.Answer(jwtToken);
     }
 }

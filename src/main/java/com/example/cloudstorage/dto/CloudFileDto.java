@@ -17,42 +17,40 @@ public enum CloudFileDto {;
 
 
     public enum RequestDeleteFile {;
-        @Value public static class Create implements SourceFileName {
+        @Value public static class Ask implements SourceFileName {
             String SourceFileName;
         }
     }
 
     public enum  RequestEditFile {;
-        @Value public static class Create implements SourceFileName, TargetFileName {
+        @Value public static class Ask implements SourceFileName, TargetFileName {
             String SourceFileName;
             String TargetFileName;
         }
     }
 
     public enum  RequestUploadFile {;
-        @Value public static class Create implements TargetFileName, Bytes {
+        @Value public static class Ask implements TargetFileName, Bytes {
             String TargetFileName;
             byte[] Bytes;
         }
     }
 
     public enum  ResponseGetFileList {;
-        @Value public static class Create implements FileList {
+        @Value public static class Answer implements FileList {
             List<?> FileList;
         }
     }
 
     public enum RequestDownloadFile {;
-        @Value public static class Create implements SourceFileName {
+        @Value public static class Ask implements SourceFileName {
             String SourceFileName;
         }
     }
 
     public enum ResponseDownloadFile {;
-        @Value public static class Create implements FileResource {
+        @Value public static class Answer implements FileResource {
             FileSystemResource FileResource;
         }
     }
-
-
 }

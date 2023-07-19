@@ -12,21 +12,21 @@ public enum AuthenticationDto {;
     private interface Email { @NotBlank String getEmail(); }
 
     public enum RequestAuth {;
-        @Value public static class Create implements Login, Password {
+        @Value public static class Ask implements Login, Password {
             String Login;
             String Password;
         }
     }
 
     public enum ResponseAuth {;
-        @Value public static class Create implements AccessToken {
+        @Value public static class Answer implements AccessToken {
             @JsonProperty("auth-token")
             String AccessToken;
         }
     }
 
     public enum ResponseAuthErr {;
-        @Value public static class Create implements Email, Password {
+        @Value public static class Answer implements Email, Password {
             String Email;
             String Password;
         }

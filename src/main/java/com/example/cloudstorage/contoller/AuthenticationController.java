@@ -16,14 +16,14 @@ public class AuthenticationController {
 
     @PostMapping(value = "/login") //Authorization method
     public ResponseEntity<?> login(@RequestBody AuthenticationRequest authRequest) {
-        AuthenticationDto.ResponseAuth.Create response;
-        var request = new AuthenticationDto.RequestAuth.Create(authRequest.getLogin(), authRequest.getPassword());
+        AuthenticationDto.ResponseAuth.Answer response;
+        var request = new AuthenticationDto.RequestAuth.Ask(authRequest.getLogin(), authRequest.getPassword());
         try {
             response = authenticationService.authentificate(request);
         }
         catch (Exception exc){
             //Адаптация к фронту вместо отправки объекта ошибки
-            var resp = new ResponseEntity<>(new AuthenticationDto.ResponseAuthErr.Create(
+            var resp = new ResponseEntity<>(new AuthenticationDto.ResponseAuthErr.Answer(
                     authRequest.getLogin(), authRequest.getPassword())
                     , HttpStatus.BAD_REQUEST);
             return resp;
