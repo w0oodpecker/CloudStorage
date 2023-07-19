@@ -12,15 +12,12 @@ import java.util.Random;
 
 public class CloudTools {
 
-    @Value("${error.lenght}")
-    public static int lenght;
-
     /*Генератор случайной строки*/
     public static String getRandomCode() {
         Random random = new Random();
         return random.ints(48, 57 + 1)
                 .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
-                .limit(lenght)
+                .limit(6)
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                 .toString();
     }

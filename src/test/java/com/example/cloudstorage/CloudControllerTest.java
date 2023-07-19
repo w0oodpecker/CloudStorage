@@ -23,17 +23,16 @@ public class CloudControllerTest {
         CloudFileService mCloudFileService = Mockito.mock(CloudFileService.class);
         CloudController cloudController = new CloudController(mCloudFileService);
 
-        MockMultipartFile mockMultipartFile = new MockMultipartFile("data", "filename.txt", "text/plain", "some xml".getBytes());
-        var requestOk = new CloudFileDto.RequestUploadFile.Ask("filenameOk.200", mockMultipartFile.getBytes());
-        var requestErr = new CloudFileDto.RequestUploadFile.Ask("filenameOk.400", mockMultipartFile.getBytes());
-
+        MockMultipartFile mockMultipartFileOk = new MockMultipartFile("data", "filenameOk.txt", "text/plain", "some xml".getBytes());
+        var requestOk = new CloudFileDto.RequestUploadFile.Ask("filenameOk.200", mockMultipartFileOk.getBytes());
         doNothing().when(mCloudFileService).uploadFile(requestOk);
-        doThrow(new InputDataException("400")).when(mCloudFileService).uploadFile(requestErr);
-
-        ResponseEntity<?> resp200 = cloudController.fileUploadCall("filenameOk.200", mockMultipartFile);
-        ResponseEntity<?> resp400 = cloudController.fileUploadCall("filenameErr.400", mockMultipartFile);
-
+        ResponseEntity<?> resp200 = cloudController.fileUploadCall("filenameOk.200", mockMultipartFileOk);
         Assertions.assertTrue(resp200.getStatusCodeValue() == 200);
+
+        MockMultipartFile mockMultipartFileErr = new MockMultipartFile("data", "filenameErr.txt", "text/plain", "some txt".getBytes());
+        var requestErr = new CloudFileDto.RequestUploadFile.Ask("filenameErr.400", mockMultipartFileErr.getBytes());
+        doThrow(new InputDataException("400")).when(mCloudFileService).uploadFile(requestErr);
+        ResponseEntity<?> resp400 = cloudController.fileUploadCall("filenameErr.400", mockMultipartFileErr);
         Assertions.assertTrue(resp400.getStatusCodeValue() == 400);
     }
 
