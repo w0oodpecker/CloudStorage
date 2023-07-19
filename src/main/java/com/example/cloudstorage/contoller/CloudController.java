@@ -6,6 +6,7 @@ import com.example.cloudstorage.model.CloudError;
 import com.example.cloudstorage.model.CloudFile;
 import com.example.cloudstorage.service.CloudFileService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,6 +16,7 @@ import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
+@Log4j2
 public class CloudController {
 
     private final CloudFileService fileService;

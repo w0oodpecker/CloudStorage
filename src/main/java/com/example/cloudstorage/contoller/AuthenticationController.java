@@ -2,7 +2,9 @@ package com.example.cloudstorage.contoller;
 
 import com.example.cloudstorage.model.AuthenticationRequest;
 import com.example.cloudstorage.service.AuthenticationService;
+import static com.example.cloudstorage.configuration.CloudMessages.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +12,7 @@ import com.example.cloudstorage.dto.AuthenticationDto;
 
 @RestController
 @RequiredArgsConstructor
+@Log4j2
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
@@ -22,7 +25,6 @@ public class AuthenticationController {
             response = authenticationService.authentificate(request);
         }
         catch (Exception exc){
-            //Адаптация к фронту вместо отправки объекта ошибки
             var resp = new ResponseEntity<>(new AuthenticationDto.ResponseAuthErr.Answer(
                     authRequest.getLogin(), authRequest.getPassword())
                     , HttpStatus.BAD_REQUEST);

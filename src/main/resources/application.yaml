@@ -18,11 +18,19 @@ spring:
     username: root
     password: password
 logging:
-    level:
+  level:
       org:
         springframework:
-          security: debug
-          web: debug
+          security: error
+          web: error
+      com:
+        example:
+          cloudstorage: error
+  pattern:
+      console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+      file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/app.log
 jwt:
   secret:
     access: 8dfbf1c431968a3841fb99d6c3216b1d436a89b3f9d228002b65a4876c5c9663 #Secret key for generation of tokens
