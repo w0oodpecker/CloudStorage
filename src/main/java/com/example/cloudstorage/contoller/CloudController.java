@@ -14,6 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Objects;
 
+import static com.example.cloudstorage.configuration.CloudMessages.*;
+
 @RestController
 @RequiredArgsConstructor
 @Log4j2
@@ -31,8 +33,10 @@ public class CloudController {
             fileService.uploadFile(request);
         } catch (InputDataException | IOException exc) {
             CloudError error = new CloudError(exc.getMessage());
+            log.info(fileName + " " + FILEUPLOADERR);
             return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST); //400
         }
+        log.info(fileName + " " + FILEUPLOADOK);
         return new ResponseEntity<>(HttpStatus.OK); //200
     }
 
@@ -45,11 +49,14 @@ public class CloudController {
             fileService.deleteFile(request);
         } catch (InputDataException exc) {
             CloudError error = new CloudError(exc.getMessage());
+            log.info(fileName + " " + FILEDELETEERROR);
             return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST); //400
         } catch (DeleteFileException exc) {
             CloudError error = new CloudError(exc.getMessage());
+            log.info(fileName + " " + FILEDELETEERROR);
             return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR); //500
         }
+        log.info(fileName + " " + FILEDELETEOK);
         return new ResponseEntity<>(HttpStatus.OK); //200
     }
 
@@ -70,11 +77,14 @@ public class CloudController {
             headers.setContentDisposition(disposition);
         } catch (InputDataException exc) {
             CloudError error = new CloudError(exc.getMessage());
+            log.info(fileName + " " + FILEDOWNLOADERR);
             return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST); //400
         } catch (RuntimeException exc) {
             CloudError error = new CloudError(exc.getMessage());
+            log.info(fileName + " " + FILEDOWNLOADERR);
             return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR); //500
         }
+        log.info(fileName + " " + FILEDOWNLOADOK);
         return new ResponseEntity<>(response.getFileResource(), headers, HttpStatus.OK); //200
     }
 
@@ -88,11 +98,14 @@ public class CloudController {
             fileService.renameFile(request);
         } catch (InputDataException exc) {
             CloudError error = new CloudError(exc.getMessage());
+            log.info(sourceFileName + FILERENAMEERROR);
             return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST); //400
         } catch (RenameFileException exc) {
             CloudError error = new CloudError(exc.getMessage());
+            log.info(sourceFileName + FILERENAMEERROR);
             return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR); //500
         }
+        log.info(sourceFileName + " " + FILERENAMEOK + " " + newFile.getFilename());
         return new ResponseEntity<>(HttpStatus.OK); //200
     }
 
@@ -105,12 +118,14 @@ public class CloudController {
             response = fileService.getFileList();
         } catch (InputDataException exc) {
             CloudError error = new CloudError(exc.getMessage());
+            log.info(FILELISTERR);
             return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST); //400
         } catch (GettingFileListException exc) {
             CloudError error = new CloudError(exc.getMessage());
+            log.info(FILELISTERR);
             return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR); //500
         }
+        log.info(FILELISTOK);
         return new ResponseEntity<>(response.getFileList(), HttpStatus.OK); //200
     }
-
 }

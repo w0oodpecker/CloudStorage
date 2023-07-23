@@ -24,7 +24,7 @@ logging:
           web: error
       com:
         example:
-          cloudstorage: error
+          cloudstorage: debug
   pattern:
       console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
       file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"

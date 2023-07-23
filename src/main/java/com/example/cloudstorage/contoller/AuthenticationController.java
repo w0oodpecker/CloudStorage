@@ -28,8 +28,10 @@ public class AuthenticationController {
             var resp = new ResponseEntity<>(new AuthenticationDto.ResponseAuthErr.Answer(
                     authRequest.getLogin(), authRequest.getPassword())
                     , HttpStatus.BAD_REQUEST);
+            log.info(request.getLogin() + " " + LOGINERR);
             return resp;
         }
+        log.info(request.getLogin() + " " + LOGINOK);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
